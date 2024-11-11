@@ -38,69 +38,112 @@
 // 5. Filter products by category:
 
 // Write a function that takes a category name (e.g., "Electronics") and returns all products in that category.
+const readline = require('readline');
+
 // Sample JSON data for products
 const productsJSON = `[
-    {"id": 1, "name": "Laptop", "category": "Electronics", "price": 1200, "available": true},
-    {"id": 2, "name": "Smartphone", "category": "Electronics", "price": 800, "available": false},
-    {"id": 3, "name": "Desk Chair", "category": "Furniture", "price": 150, "available": true}
-  ]`;
-  
-  // Task 1: Parse the JSON data
-  function parseProductsData(jsonData) {
-    try {
-      const products = JSON.parse(jsonData);
-      return products;
-    } catch (error) {
-      console.error("Invalid JSON data", error);
-      return [];
-    }
+  {"id": 1, "name": "Laptop", "category": "Electronics", "price": 1200, "available": true},
+  {"id": 2, "name": "Smartphone", "category": "Electronics", "price": 800, "available": false},
+  {"id": 3, "name": "Desk Chair", "category": "Furniture", "price": 150, "available": true}
+]`;
+
+// Parse the JSON data
+function parseProductsData(jsonData) {
+  try {
+    const products = JSON.parse(jsonData);
+    return products;
+  } catch (error) {
+    console.error("Invalid JSON data", error);
+    return [];
   }
-  
-  // Parse the products
-  let products = parseProductsData(productsJSON);
-  
-  // Task 2: Add a new product
-  function addProduct(product) {
-    if (!product.id || !product.name || !product.category || product.price === undefined || product.available === undefined) {
-      console.error("Invalid product structure");
+}
+// Initialize products
+let products = parseProductsData(productsJSON);
+// Add a new product
+function addProduct(product) {
+  if (!product.id || !product.name || !product.category || product.price === undefined || product.available === undefined) {
+    console.error("Invalid product structure");
+    return;
+  }
+  products.push(product);
+}
+// Update the price of a product by ID
+function updateProductPrice(productId, newPrice) {
+  const product = products.find(p => p.id === productId);
+  if (product) {
+    product.price = newPrice;
+  } else {
+    console.error("Product not found");
+  }
+}
+// Filter products based on availability
+function getAvailableProducts() {
+  return products.filter(product => product.available);
+}
+// Filter products by category
+function getProductsByCategory(category) {
+  return products.filter(product => product.category === category);
+}
+// Create readline interface
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+// Function to prompt user input in Node.js
+function askQuestion(query) {
+  return new Promise(resolve => rl.question(query, resolve));
+}
+
+// Main menu function
+async function showMenu() {
+  console.log(
+    "Choose an option:\n" +
+    "1. View all products\n" +
+    "2. Add a new product\n" +
+    "3. Update product price\n" +
+    "4. Filter products by availability\n" +
+    "5. Filter products by category\n" +
+    "6. Exit"
+  );
+
+  const choice = await askQuestion("Enter your choice: ");
+
+  switch (choice) {
+    case "1":
+      console.log("All products:", products);
+      break;
+    case "2":
+      const id = parseInt(await askQuestion("Enter product ID: "));
+      const name = await askQuestion("Enter product name: ");
+      const category = await askQuestion("Enter product category: ");
+      const price = parseFloat(await askQuestion("Enter product price: "));
+      const available = (await askQuestion("Is the product available? (yes/no): ")) === "yes";
+      addProduct({ id, name, category, price, available });
+      console.log("Product added:", products);
+      break;
+    case "3":
+      const productId = parseInt(await askQuestion("Enter product ID to update: "));
+      const newPrice = parseFloat(await askQuestion("Enter the new price: "));
+      updateProductPrice(productId, newPrice);
+      console.log("Updated products:", products);
+      break;
+    case "4":
+      console.log("Available products:", getAvailableProducts());
+      break;
+    case "5":
+      const filterCategory = await askQuestion("Enter category to filter by: ");
+      console.log("Products in category:", getProductsByCategory(filterCategory));
+      break;
+    case "6":
+      console.log("Exiting...");
+      rl.close();
       return;
-    }
-    products.push(product);
+    default:
+      console.error("Invalid choice. Please try again.");
   }
-  
-  // Task 3: Update the price of a product by ID
-  function updateProductPrice(productId, newPrice) {
-    const product = products.find(p => p.id === productId);
-    if (product) {
-      product.price = newPrice;
-    } else {
-      console.error("Product not found");
-    }
-  }
-  
-  // Task 4: Filter products based on availability
-  function getAvailableProducts() {
-    return products.filter(product => product.available);
-  }
-  
-  // Task 5: Filter products by category
-  function getProductsByCategory(category) {
-    return products.filter(product => product.category === category);
-  }
-  
-  // Example usage:
-  
-  // Adding a new product
-  addProduct({ id: 4, name: "Tablet", category: "Electronics", price: 300, available: true });
-  console.log("Products after adding a new one:", products);
-  
-  // Updating product price
-  updateProductPrice(2, 850);
-  console.log("Products after price update:", products);
-  
-  // Filtering products by availability
-  console.log("Available products:", getAvailableProducts());
-  
-  // Filtering products by category
-  console.log("Electronics products:", getProductsByCategory("Electronics"));
-  
+
+  showMenu();
+}
+
+showMenu();
