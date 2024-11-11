@@ -1,3 +1,6 @@
+// Assessment 2
+
+
 // Part 1: Basic MongoDB Commands and Queries
 
 // Objective: Understand and demonstrate basic CRUD operations on collections with relationships.
@@ -10,7 +13,6 @@
 
 // o Insert 5 customer documents into the customers collection.
 
-// o Insert 5 order documents into the orders collection, each linked to a customer using the customer_id field (the _id of a customer document).
 // task 1
 db.customers.insertMany([
     { name: "John Doe", email: "johndoe@example.com", address: { street: "123 Main St", city: "Springfield", zipcode: "12345" }, phone: "555-1234", registration_date: new Date("2023-01-01T12:00:00Z") },
@@ -20,14 +22,75 @@ db.customers.insertMany([
     { name: "Carol White", email: "carolwhite@example.com", address: { street: "654 Maple St", city: "Springfield", zipcode: "12345" }, phone: "555-6789", registration_date: new Date("2023-05-05T12:00:00Z") }
   ]);
   
+// to find the customer id 
+db.customers.findOne({ name: "John Doe" })._id
+db.customers.findOne({ name: "Jane Smith" })._id
+db.customers.findOne({ name: "Alice Johnson" })._id
+db.customers.findOne({ name: "Bob Brown" })._id
+db.customers.findOne({ name: "Carol White" })._id
 
+
+// o Insert 5 order documents into the orders collection, each linked to a customer using the customer_id field (the _id of a customer document).
   db.orders.insertMany([
-    { order_id: "ORD123456", customer_id: ObjectId("67320c549ec744648a0d8190"), order_date: new Date("2023-05-15T14:00:00Z"), status: "shipped", items: [{ product_name: "Laptop", quantity: 1, price: 1500 }, { product_name: "Mouse", quantity: 2, price: 25 }], total_value: 1550 },
-    { order_id: "ORD123457", customer_id: ObjectId("67320c549ec744648a0d8191"), order_date: new Date("2023-06-01T10:00:00Z"), status: "pending", items: [{ product_name: "Tablet", quantity: 1, price: 300 }], total_value: 300 },
-    { order_id: "ORD123458", customer_id: ObjectId("67320c549ec744648a0d8192"), order_date: new Date("2023-06-10T08:00:00Z"), status: "delivered", items: [{ product_name: "Keyboard", quantity: 1, price: 100 }, { product_name: "Monitor", quantity: 1, price: 200 }], total_value: 300 },
-    { order_id: "ORD123459", customer_id: ObjectId("67320c549ec744648a0d8193"), order_date: new Date("2023-06-20T12:00:00Z"), status: "shipped", items: [{ product_name: "Smartphone", quantity: 1, price: 800 }], total_value: 800 },
-    { order_id: "ORD123460", customer_id: ObjectId("67320c549ec744648a0d8194"), order_date: new Date("2023-07-01T15:00:00Z"), status: "processing", items: [{ product_name: "Headphones", quantity: 1, price: 50 }, { product_name: "Charger", quantity: 1, price: 20 }], total_value: 70 }
+    { 
+      _id: ObjectId(), 
+      order_id: "ORD123456", 
+      customer_id: ObjectId('67320c549ec744648a0d8190'),  // John Doe's ObjectId
+      order_date: "2023-05-15", 
+      status: "shipped", 
+      items: [
+        { product_name: "Laptop", quantity: 1, price: 1500 }, 
+        { product_name: "Mouse", quantity: 2, price: 25 }
+      ], 
+      total_value: 1550 
+    },
+    { 
+      _id: ObjectId(), 
+      order_id: "ORD123457", 
+      customer_id: ObjectId('67320c549ec744648a0d8191'),  
+      order_date: "2023-06-01", 
+      status: "pending", 
+      items: [
+        { product_name: "Tablet", quantity: 1, price: 300 }
+      ], 
+      total_value: 300 
+    },
+    { 
+      _id: ObjectId(), 
+      order_id: "ORD123458", 
+      customer_id: ObjectId('67320c549ec744648a0d8192'),  
+      order_date: "2023-06-10", 
+      status: "delivered", 
+      items: [
+        { product_name: "Keyboard", quantity: 1, price: 100 },
+        { product_name: "Monitor", quantity: 1, price: 200 }
+      ], 
+      total_value: 300 
+    },
+    { 
+      _id: ObjectId(), 
+      order_id: "ORD123459", 
+      customer_id: ObjectId('67320c549ec744648a0d8193'), 
+      order_date: "2023-06-20", 
+      status: "shipped", 
+      items: [
+        { product_name: "Smartphone", quantity: 1, price: 800 }
+      ], 
+      total_value: 800 
+    },
+    { 
+      _id: ObjectId(), 
+      order_id: "ORD123460", 
+      customer_id: ObjectId('67320c549ec744648a0d8194'), 
+      status: "processing", 
+      items: [
+        { product_name: "Headphones", quantity: 1, price: 50 },
+        { product_name: "Charger", quantity: 1, price: 20 }
+      ], 
+      total_value: 70 
+    }
   ]);
+  
 
 //   2. Find Orders for a Specific Customer:
 
