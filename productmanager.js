@@ -42,14 +42,13 @@
 // Write a function that takes a category name (e.g., "Electronics") and returns all products in that category.
 const readline = require('readline');
 
-// Sample JSON data for products
+
 const productsJSON = `[
   {"id": 1, "name": "Laptop", "category": "Electronics", "price": 1200, "available": true},
   {"id": 2, "name": "Smartphone", "category": "Electronics", "price": 800, "available": false},
   {"id": 3, "name": "Desk Chair", "category": "Furniture", "price": 150, "available": true}
 ]`;
 
-// Parse the JSON data
 function parseProductsData(jsonData) {
   try {
     const products = JSON.parse(jsonData);
@@ -59,9 +58,7 @@ function parseProductsData(jsonData) {
     return [];
   }
 }
-// Initialize products
 let products = parseProductsData(productsJSON);
-// Add a new product
 function addProduct(product) {
   if (!product.id || !product.name || !product.category || product.price === undefined || product.available === undefined) {
     console.error("Invalid product structure");
@@ -69,7 +66,6 @@ function addProduct(product) {
   }
   products.push(product);
 }
-// Update the price of a product by ID
 function updateProductPrice(productId, newPrice) {
   const product = products.find(p => p.id === productId);
   if (product) {
@@ -78,26 +74,23 @@ function updateProductPrice(productId, newPrice) {
     console.error("Product not found");
   }
 }
-// Filter products based on availability
 function getAvailableProducts() {
   return products.filter(product => product.available);
 }
-// Filter products by category
+
 function getProductsByCategory(category) {
   return products.filter(product => product.category === category);
 }
-// Create readline interface
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-// Function to prompt user input in Node.js
 function askQuestion(query) {
   return new Promise(resolve => rl.question(query, resolve));
 }
 
-// Main menu function
 async function showMenu() {
   console.log(
     "Choose an option:\n" +
